@@ -30,7 +30,7 @@ draw_gui_text :: (pos := ZERO_2D, ang := (0).(f32), scl := ONE_2D, text := "", f
         x_pos += coef * glyph.x_pos;
         y_pos += coef * glyph.y_pos;
 
-        for *vertex_positions it.* = make_matrix(coef * pos, ang, scl) * it.*;
+        for *vertex_positions it.* = transform(coef * pos, ang, scl) * it.*;
 
         vertex_uvs[0] = .{ d.s0, d.t1 };
         vertex_uvs[1] = .{ d.s1, d.t1 };

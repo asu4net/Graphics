@@ -1,4 +1,4 @@
-DEF_FONT_PATH :: "assets/fonts/AlbertSans-VariableFont_wght.ttf"; 
+DEF_FONT_PATH :: "assets/fonts/OpenSans-BoldItalic.ttf"; 
 
 Glyph :: struct {
     quad           : AlignedQuad;
@@ -13,12 +13,12 @@ Font :: struct {
     pixel_height : s32;
 }
 
-is_font_init :: (font : *Font) -> bool {
+is_font_init :: (font: *Font) -> bool {
     assert(font != null);
     return font.is_init;
 }
 
-init_font :: (font : *Font, path : string = DEF_FONT_PATH) {
+init_font :: (font: *Font, path: string = DEF_FONT_PATH) {
     assert(!is_font_init(font));
     
     file, success := File.file_open(path);
@@ -45,12 +45,13 @@ init_font :: (font : *Font, path : string = DEF_FONT_PATH) {
     PIXELS_RGB_LENGTH   :: PIXELS_ALPHA_LENGTH * 4;
     font.pixel_height = PIXEL_HEIGHT;
     
-    pixels_rgb: [PIXELS_RGB_LENGTH] u8;
+    pixels_rgb := NewArray(PIXELS_RGB_LENGTH, u8);
+    defer array_free(pixels_rgb);
 
     pixels_alpha := NewArray(PIXELS_ALPHA_LENGTH, u8);
     defer array_free(pixels_alpha);
 
-    baked_char := NewArray(CHAR_COUNT, Bakedchar); //pending free
+    baked_char := NewArray(CHAR_COUNT, Bakedchar);
     defer array_free(baked_char);
 
     bake_font_bitmap(buffer, 0, PIXEL_HEIGHT, pixels_alpha.data, WIDTH, HEIGHT, 0, CHAR_COUNT, baked_char.data);
@@ -70,8 +71,8 @@ init_font :: (font : *Font, path : string = DEF_FONT_PATH) {
     };
     
     spec := Texture.Spec.{
-        width = WIDTH,
-        width = HEIGHT,
+        width    = WIDTH,
+        height   = HEIGHT,
         channels = 4,
     };
 
