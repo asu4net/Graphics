@@ -53,7 +53,7 @@ swap_buffers :: inline ()  {
     reset_temporary_storage();
 }
 
-set_window_callback :: inline (callback: Window.Process_Events_Proc) {
+add_window_callback :: inline (callback: Window.Process_Events_Proc) {
     window := get_window();
     array_add(*window.callbacks, callback);
 }
